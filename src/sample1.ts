@@ -24,7 +24,7 @@ async function sequentialCall(): Promise<void> {    // 関数内でawaitを使�
     const val2 = await asyncFunc1(2);
     const val3 = await asyncFunc1(3);
     const end = Date.now();
-    const result = val1 + val2 + val3 ;
+    const result = val1 + val2 + val3;
     console.log("result=" + result + " elapse:" + ((end - start) / 1000) + " sec");
 }
 
@@ -37,7 +37,21 @@ async function parallelCall(): Promise<void> {
     // 並列処理
     const [val1, val2, val3] = await Promise.all([asyncFunc1(1), asyncFunc1(2), asyncFunc1(3)]);
     const end = Date.now();
-    const result = val1 + val2 + val3 ;
+    const result = val1 + val2 + val3;
+    console.log("result=" + result + " elapse:" + ((end - start) / 1000) + " sec");
+}
+
+/**
+ * for ループ内で非同期関数を実行
+ */
+async function loopCall(): Promise<void> {
+    console.log("loopCall");
+    const start = Date.now();
+    let result = 0;
+    for (let i = 0; i < 3; i++) {
+        result += await asyncFunc1(i + 1);
+    }
+    const end = Date.now();
     console.log("result=" + result + " elapse:" + ((end - start) / 1000) + " sec");
 }
 
@@ -48,6 +62,7 @@ async function parallelCall(): Promise<void> {
 (async () => {   // 関数の戻り値型を省略すると Promise<void>になるみたい
     await sequentialCall();
     await parallelCall();
+    await loopCall();
 })().then(() => {
     process.kill(process.pid);  // これがないと vscode debuggerが終わらない。バグ？
 });
