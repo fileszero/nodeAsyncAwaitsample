@@ -5,10 +5,10 @@
                 "type": "node",
                 "request": "launch",
                 "name": "Debug",
-                "program": "${workspaceRoot}/dist/src/${fileBasenameNoExtension}.js",
+                "program": "${workspaceRoot}/dest/${fileBasenameNoExtension}.js",
                 "smartStep": true,
                 "outFiles": [
-                    "${workspaceRoot}/dist/**/*.js"
+                    "${workspaceRoot}/dest/**/*.js"
                 ],
                 "protocol": "inspector"
             },
