@@ -55,17 +55,24 @@ async function loopCall(): Promise<void> {
     console.log("result=" + result + " elapse:" + ((end - start) / 1000) + " sec");
 }
 
-// エントリーポイント
-// await sequentialCall();  // こう書きたいところだけど、
-// await parallelCall();    // トップベルでawaitな呼び出しは出来ないっぽい。
-//                          // 何かしらのasyncな関数で包む。
-(async () => {   // 関数の戻り値型を省略すると Promise<void>になるみたい
+/**
+ * エントリーポイント
+ *
+ * await sequentialCall();  // こう書きたいところだけど、
+ * await parallelCall();    // トップベルでawaitな呼び出しは出来ないっぽい。
+ *                          // 何かしらのasyncな関数で包む。
+ */
+async function entryPoint() {   // 関数の戻り値型を省略すると Promise<void>になるみたい
     await sequentialCall();
     await parallelCall();
     await loopCall();
-})().then(() => {
-    process.kill(process.pid);  // これがないと vscode debuggerが終わらない。バグ？
-});
+}
+
+// 実行！！
+entryPoint()
+    .then(() => {   // Promiseなのでthen出来る
+        process.kill(process.pid);  // これがないと vscode debuggerが終わらない。バグ？
+    });
 
 // see https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-7.html
 
