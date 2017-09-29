@@ -18,10 +18,14 @@ function asyncFunc1(num: number): Promise<number> { // 非同期関数の返り�
  */
 async function sequentialCall(): Promise<void> {    // 関数内でawaitを使う場合は asyncを付ける
     console.log("sequentialCall");
+    const start = Date.now();
+    // 逐次処理
     const val1 = await asyncFunc1(1);   // awaitを付けてコールで非同期処理が終わるまで待ってくれます。
     const val2 = await asyncFunc1(2);
     const val3 = await asyncFunc1(3);
-    console.log(val1 + val2 + val3);
+    const end = Date.now();
+    const result = val1 + val2 + val3 ;
+    console.log("result=" + result + " elapse:" + ((end - start) / 1000) + " sec");
 }
 
 /**
@@ -29,8 +33,12 @@ async function sequentialCall(): Promise<void> {    // 関数内でawaitを使�
  */
 async function parallelCall(): Promise<void> {
     console.log("parallelCall");
+    const start = Date.now();
+    // 並列処理
     const [val1, val2, val3] = await Promise.all([asyncFunc1(1), asyncFunc1(2), asyncFunc1(3)]);
-    console.log(val1 + val2 + val3);
+    const end = Date.now();
+    const result = val1 + val2 + val3 ;
+    console.log("result=" + result + " elapse:" + ((end - start) / 1000) + " sec");
 }
 
 // エントリーポイント
@@ -41,8 +49,8 @@ async function parallelCall(): Promise<void> {
     await sequentialCall();
     await parallelCall();
 })().then(() => {
-        process.kill(process.pid);  // これがないと vscode debuggerが終わらない。バグ？
-    });
+    process.kill(process.pid);  // これがないと vscode debuggerが終わらない。バグ？
+});
 
 // see https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-7.html
 
