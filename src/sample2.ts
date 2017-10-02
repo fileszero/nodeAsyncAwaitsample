@@ -62,6 +62,13 @@ async function sequentialCall(): Promise<void> {    // 関数内でawaitを使�
         console.log("try ... catchでハンドル:" + err);
     }
 
+    // lv.1 no Promise.catch
+    try {
+        result += await asyncExceptionFunc(91);
+    } catch (err) {
+        console.log("Promise.catchを付けないで、try ... catchでハンドル:" + err);
+    }
+
     const end = Date.now();
     console.log("result=" + result + " elapse:" + ((end - start) / 1000) + " sec");
 }
